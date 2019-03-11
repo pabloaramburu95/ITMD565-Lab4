@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ITMD 565 Lab 4 - paramburugarcia</title>
+	<link href="https://fonts.googleapis.com/css?family=Archivo+Black" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed" rel="stylesheet">
+	<style type="text/css">
+		body {
+			background-image: radial-gradient(#4CCEB2, #2F8FD8);
+      		background-attachment:fixed;
+			font-family: sans-serif;
+		}
+		.button {
+			margin-top:20px;
+			padding:0.35em 1.2em;
+			border:0.2em solid lightgray;
+			font-family:'Roboto',sans-serif;
+			text-align:center;
+			transition: all 0.2s;
+			font-size: 16px;
+			text-shadow: 0px 2px 3px lightgray;
+		}
+		.button:enabled {
+			color:black;
+			font-weight: bold;
+		}
+		.button:disabled {
+			color:gray;
+		}
+		.button:hover:enabled {
+			font-size:18px;
+			background-color:lightgray;
+		}
+		table {
+			align = center;
+			margin-right: auto;
+			margin-left: auto;
+			border-collapse: collapse;
+			width: 85%;
+			text-align: center;
+		}
+		th, td {
+			text-align = center;
+			padding = 9px;
+			border: 1px solid #ddd;
+		}
+		tr:nth-child(2n+2) {
+			background-color: lightgray;
+			font-size:17px;
+		}
+		tr:nth-child(2n+3) {
+			background-color: white;
+			font-size: 17px;
+		}
+		tr:hover {
+			font-weight: bold;
+		}
+		.firstRow {
+			background-color: gray;
+			color: white;
+			font-size:20px;
+			font-family: 'Barlow Semi Condensed', sans-serif;
+		}
+		#wrapper {
+			text-align: center;
+		}
+		h1 {
+			font-family: 'Archivo Black', sans-serif;
+			text-shadow: 0px 2px 3px gray;
+			font-size:45px;
+			margin-bottom: auto;
+		}
+		h2 {
+			margin-top: auto;
+			font-family: 'Barlow Semi Condensed', sans-serif;
+		}
+		h3 {
+			font-family: 'Barlow Semi Condensed', sans-serif;
+			font-size:35px;
+			margin-bottom: 10px;
+		}
+	</style>
+</head>
+<body>
+	<div id="wrapper">
+		<h1>ITMD 565 - Lab 4 </h1>
+		<h2>Pablo Aramburu Garcia - paramburugarcia@hawk.iit.edu</h2>
+		<button id="loadDataBtn" class="button">Load Data</button>
+		<button id="resetBtn" class="button">Reset Lab</button>
+		<h3> Employee List </h3>
+	</div>
+	<div id="results"></div>
+	<script type="text/javascript">
+		// Creation of buttons
+		document.getElementById("loadDataBtn").addEventListener("click", loadFunction);
+		document.getElementById("resetBtn").addEventListener("click", resetFunction);
+		// Initate the reset button disabled
+		document.getElementById("resetBtn").disabled = true;
+		
+		var table = document.createElement('table');
+		document.getElementById("results").appendChild(table);
+		
+		// Creation of headers
+		var firstRow = table.insertRow(0);
+	    firstRow.setAttribute("class", "firstRow");
+		var cabId = document.createElement('th');
+	    var cabName = document.createElement('th');
+	    var cabLastName = document.createElement('th');
+	    var cabTitle = document.createElement('th');
+	    var cabEmail = document.createElement('th');
+	    var cabGen = document.createElement('th');
+	    var cabAct = document.createElement('th');
+
+	    cabId.appendChild(document.createTextNode("id"));
+	    cabName.appendChild(document.createTextNode("Name"));
+	    cabLastName.appendChild(document.createTextNode("Last Name"));
+	    cabTitle.appendChild(document.createTextNode("Title"));
+	    cabEmail.appendChild(document.createTextNode("Email"));
+	    cabGen.appendChild(document.createTextNode("Gender"));
+	    cabAct.appendChild(document.createTextNode("Active"));
+
+	    firstRow.appendChild(cabId);
+	    firstRow.appendChild(cabName);
+	    firstRow.appendChild(cabLastName);
+	    firstRow.appendChild(cabTitle);
+	    firstRow.appendChild(cabEmail);
+	    firstRow.appendChild(cabGen);
+	    firstRow.appendChild(cabAct);
+
+		function loadFunction(){
+			document.getElementById("resetBtn").disabled = false;
+			document.getElementById("loadDataBtn").disabled = true;
+
+			fetch('http://libertyville.rice.iit.edu/scripts/4565_lab4.php')
+        	.then(function(response){
+            	return response.json();
+       		})
+        	.then(function(myJson){
+	            for(var i = 0; i < myJson.length; i++) {
+                	var row = document.createElement('tr');
+                	var cellID = document.createElement('td');
+	            	var idtext = document.createTextNode(myJson[i]["id"]);
+	            	cellID.appendChild(idtext);
+	            	row.appendChild(cellID);
+                
+	                var cellFirstName = document.createElement('td');
+	                var nameText = document.createTextNode(myJson[i]["first_name"]);
+	                cellFirstName.appendChild(nameText);
+	                row.appendChild(cellFirstName);
+	                table.appendChild(row);
+
+	                var cellLastName = document.createElement('td');
+	                var lastNameText = document.createTextNode(myJson[i]["last_name"]);
+	                cellLastName.appendChild(lastNameText);
+	                row.appendChild(cellLastName);
+	                table.appendChild(row);
+
+	                var cellTitle = document.createElement('td');
+	                var titleText = document.createTextNode(myJson[i]["title"]);
+	                cellTitle.appendChild(titleText);
+	                row.appendChild(cellTitle);
+	                table.appendChild(row);
+
+	                var cellEmail = document.createElement('td');
+	                var emailText = document.createTextNode(myJson[i]["email"]);
+	                cellEmail.appendChild(emailText);
+	                row.appendChild(cellEmail);
+	                table.appendChild(row);
+
+	                var cellGender = document.createElement('td');
+	                var genderText = document.createTextNode(myJson[i]["gender"]);
+	                cellGender.appendChild(genderText);
+	                row.appendChild(cellGender);
+	                table.appendChild(row);
+
+	                var cellActive = document.createElement('td');
+	                var activeText = document.createTextNode(myJson[i]["active"]);
+	                cellActive.appendChild(activeText);
+	                if(String(myJson[i]["active"])=="true"){
+	                	cellActive.style.color="green";
+	                }else{
+	                	cellActive.style.color="red";
+	                }
+	                row.appendChild(cellActive);
+	                table.appendChild(row); 
+            	}
+            	document.getElementById('results').appendChild(table);
+			})
+		}
+		
+		function resetFunction(){
+			document.getElementById("resetBtn").disabled = true;
+			document.getElementById("loadDataBtn").disabled = false;
+			// Delete rows from table. I start always at the last row in order to avoid errors because the length of the table
+			// is different in each interaction.
+			for(var i = table.rows.length - 1; i > 0; i--) {
+			    table.deleteRow(i);
+			}
+		}
+	</script>
+</body>
+</html>
